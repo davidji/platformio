@@ -16,11 +16,8 @@ PlatformIO
 .. image:: https://img.shields.io/pypi/l/platformio.svg
     :target: https://pypi.python.org/pypi/platformio/
     :alt:  License
-.. image:: https://img.shields.io/pypi/dm/platformio.svg
-    :target: https://pypi.python.org/pypi/platformio/
-    :alt: PyPi Downloads
 .. image:: https://img.shields.io/community/PlatformIO.png
-   :alt: Join the chat at https://gitter.im/platformio/platformio
+   :alt: Community Forums
    :target: https://community.platformio.org
 .. image:: https://img.shields.io/donate/PlatformIO.png?color=yellow
    :alt: Donate for PlatformIO.Org
@@ -29,7 +26,7 @@ PlatformIO
 
 `Home <http://platformio.org>`_ |
 `IDE <http://platformio.org/platformio-ide>`_ |
-`Project Examples <https://github.com/platformio/platformio/tree/develop/examples>`_ |
+`Project Examples <https://github.com/platformio/platformio-examples/tree/develop>`_ |
 `Docs <http://docs.platformio.org>`_ |
 `Twitter <https://twitter.com/PlatformIO_Org>`_ |
 `Facebook <https://www.facebook.com/platformio>`_ |
@@ -188,26 +185,12 @@ For further details, please refer to `What is PlatformIO? <http://docs.platformi
 Contributing
 ------------
 
-1. Fork the repository on GitHub.
-2. Make a branch off of ``develop``
-3. Run ``pip install tox``
-4. Go to the root of project where is located ``tox.ini`` and run ``tox -e develop``
-5. Activate current development environment:
+See `contributing guidelines <https://github.com/platformio/platformio/blob/develop/CONTRIBUTING.md>`_.
 
-   * Windows: ``.tox\develop\Scripts\activate``
-   * Bash/ZSH: ``source .tox/develop/bin/activate``
-   * Fish: ``source .tox/bin/activate.fish``
-
-6. Make changes to code, documentation, etc.
-7. Lint source code ``tox -e lint``
-8. Run the tests ``tox -e py27``
-9. Commit changes to your forked repository
-10. Submit a Pull Request on GitHub.
-
-Licence
+License
 -------
 
 Copyright 2014-2016 Ivan Kravets <me@ikravets.com>
 
-The PlatformIO is licensed under the permissive Apache 2.0 licence,
+The PlatformIO is licensed under the permissive Apache 2.0 license,
 so you can use it in both commercial and personal projects with confidence.

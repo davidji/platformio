@@ -4,12 +4,132 @@ Release Notes
 PlatformIO 2.0
 --------------
 
-2.9.2 (2016-??-??)
+2.11.1 (2016-07-12)
+~~~~~~~~~~~~~~~~~~~
+
+* Added support for Arduino M0, M0 Pro and Tian boards
+  (`issue #472 <https://github.com/platformio/platformio/issues/472>`_)
+* Added support for Microchip chipKIT Lenny board
+* Updated Microchip PIC32 Arduino framework to v1.2.1
+* Documented `uploading of EEPROM data <http://docs.platformio.org/en/latest/platforms/atmelavr.html#upload-eeprom-data>`__
+  (from EEMEM directive)
+* Added ``Rebuild C/C++ Project Index`` target to CLion and Eclipse IDEs
+* Improved project generator for `CLion IDE <http://docs.platformio.org/en/latest/ide/clion.html>`__
+* Added ``udev`` rules for OpenOCD CMSIS-DAP adapters
+  (`issue #718 <https://github.com/platformio/platformio/issues/718>`_)
+* Auto-remove project cache when PlatformIO is upgraded
+* Keep user changes for ``.gitignore`` file when re-generate/update project data
+* Ignore ``[platformio]`` section from custom project configuration file when
+  `platformio ci --project-conf <http://docs.platformio.org/en/latest/userguide/cmd_ci.html>`__
+  command is used
+* Fixed missed ``--boot`` flag for the firmware uploader for ATSAM3X8E
+  Cortex-M3 MCU based boards (Arduino Due, etc)
+  (`issue #710 <https://github.com/platformio/platformio/issues/710>`_)
+* Fixed missing trailing ``\`` for the source files list when generate project
+  for `Qt Creator IDE <http://docs.platformio.org/en/latest/ide/qtcreator.html>`__
+  (`issue #711 <https://github.com/platformio/platformio/issues/711>`_)
+* Split source files to ``HEADERS`` and ``SOURCES`` when generate project
+  for `Qt Creator IDE <http://docs.platformio.org/en/latest/ide/qtcreator.html>`__
+  (`issue #713 <https://github.com/platformio/platformio/issues/713>`_)
+
+2.11.0 (2016-06-28)
+~~~~~~~~~~~~~~~~~~~
+
+* New ESP8266-based boards: Generic ESP8285 Module, Phoenix 1.0 & 2.0, WifInfo
+* Added support for Arduino M0 Pro board
+  (`issue #472 <https://github.com/platformio/platformio/issues/472>`_)
+* Added support for Arduino MKR1000 board
+  (`issue #620 <https://github.com/platformio/platformio/issues/620>`_)
+* Added support for Adafruit Feather M0, SparkFun SAMD21 and SparkFun SAMD21
+  Mini Breakout boards
+  (`issue #520 <https://github.com/platformio/platformio/issues/520>`_)
+* Updated Arduino ESP8266 core for Espressif platform to 2.3.0
+* Better removing unnecessary flags using ``build_unflags`` option
+  (`issue #698 <https://github.com/platformio/platformio/issues/698>`_)
+* Fixed issue with ``platformio init --ide`` command for Python 2.6
+
+2.10.3 (2016-06-15)
+~~~~~~~~~~~~~~~~~~~
+
+* Fixed issue with ``platformio init --ide`` command
+
+2.10.2 (2016-06-15)
+~~~~~~~~~~~~~~~~~~~
+
+* Added support for ST Nucleo L031K6 board to ARM mbed framework
+* Process ``build_unflags`` option for ARM mbed framework
+* Updated Intel ARC32 Arduino framework to v1.0.6
+  (`issue #695 <https://github.com/platformio/platformio/issues/695>`_)
+* Improved a check of program size before uploading to the board
+* Fixed issue with ARM mbed framework ``-u _printf_float`` and
+  ``-u _scanf_float`` when parsing ``$LINKFLAGS``
+* Fixed issue with ARM mbed framework and extra includes for the custom boards,
+  such as Seeeduino Arch Pro
+
+2.10.1 (2016-06-13)
+~~~~~~~~~~~~~~~~~~~
+
+* Re-submit a package to PyPI
+
+2.10.0 (2016-06-13)
+~~~~~~~~~~~~~~~~~~~
+
+* Added support for `emonPi <https://github.com/openenergymonitor/emonpi>`__,
+  the OpenEnergyMonitor system
+  (`issue #687 <https://github.com/platformio/platformio/issues/687>`_)
+* Added support for `SPL <http://platformio.org/frameworks/spl>`__
+  framework for STM32F0 boards
+  (`issue #683 <https://github.com/platformio/platformio/issues/683>`_)
+* Added support for `Arduboy DevKit <https://www.arduboy.com>`__, the game system
+  the size of a credit card
+* Updated ARM mbed framework package to v121
+* Check program size before uploading to the board
+  (`issue #689 <https://github.com/platformio/platformio/issues/689>`_)
+* Improved firmware uploading to Arduino Leonardo based boards
+  (`issue #691 <https://github.com/platformio/platformio/issues/691>`_)
+* Fixed issue with ``-L relative/path`` when parsing ``build_flags``
+  (`issue #688 <https://github.com/platformio/platformio/issues/688>`_)
+
+2.9.4 (2016-06-04)
 ~~~~~~~~~~~~~~~~~~
 
+* Show ``udev`` warning only for the Linux OS while uploading firmware
+
+2.9.3 (2016-06-03)
+~~~~~~~~~~~~~~~~~~
+
+* Added support for `Arduboy <https://www.arduboy.com>`__, the game system
+  the size of a credit card
+* Updated `99-platformio-udev.rules <https://github.com/platformio/platformio/blob/develop/scripts/99-platformio-udev.rules>`__ for Linux OS
+* Refactored firmware uploading to the embedded boards with SAM-BA bootloader
+
+2.9.2 (2016-06-02)
+~~~~~~~~~~~~~~~~~~
+
+* Simplified `Continuous Integration with AppVeyor <http://docs.platformio.org/en/latest/ci/appveyor.html>`__
+  (`issue #671 <https://github.com/platformio/platformio/issues/671>`_)
+* Automatically add source directory to ``CPPPATH`` of Build System
+* Added support for Silicon Labs SLSTK3401A (Pearl Gecko) and
+  MultiTech mDot F411 ARM mbed based boards
+* Added support for MightyCore ATmega8535 board
+  (`issue #585 <https://github.com/platformio/platformio/issues/585>`_)
+* Added ``stlink`` as the default uploader for STM32 Discovery boards
+  (`issue #665 <https://github.com/platformio/platformio/issues/665>`_)
 * Use HTTP mirror for Package Manager in a case with SSL errors
   (`issue #645 <https://github.com/platformio/platformio/issues/645>`_)
+* Improved firmware uploading to Arduino Leonardo/Due based boards
 * Fixed bug with ``env_default`` when ``pio run -e`` is used
+* Fixed issue with ``src_filter`` option for Windows OS
+  (`issue #652 <https://github.com/platformio/platformio/issues/652>`_)
+* Fixed configuration data for TI LaunchPads based on msp430fr4133 and
+  msp430fr6989 MCUs
+  (`issue #676 <https://github.com/platformio/platformio/issues/676>`_)
+* Fixed issue with ARM mbed framework and multiple definition errors
+  on FRDM-KL46Z board
+  (`issue #641 <https://github.com/platformio/platformio/issues/641>`_)
+* Fixed issue with ARM mbed framework when abstract class breaks compile
+  for LPC1768
+  (`issue #666 <https://github.com/platformio/platformio/issues/666>`_)
 
 2.9.1 (2016-04-30)
 ~~~~~~~~~~~~~~~~~~
@@ -653,7 +773,7 @@ PlatformIO 1.0
   (`issue #183 <https://github.com/platformio/platformio/issues/183>`_)
 * Added GDB as alternative uploader to `ststm32 <http://docs.platformio.org/en/latest/platforms/ststm32.html>`__ platform
   (`issue #175 <https://github.com/platformio/platformio/issues/174>`_)
-* Added `examples <https://github.com/platformio/platformio/tree/develop/examples>`__
+* Added `examples <https://github.com/platformio/platformio-examples/tree/develop>`__
   with preconfigured IDE projects
   (`issue #154 <https://github.com/platformio/platformio/issues/154>`_)
 * Fixed firmware uploading under Linux OS for Arduino Leonardo board

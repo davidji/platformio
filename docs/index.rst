@@ -1,4 +1,4 @@
-..  Copyright 2014-2016 Ivan Kravets <me@ikravets.com>
+..  Copyright 2014-present Ivan Kravets <me@ikravets.com>
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -19,7 +19,7 @@ integration. Arduino and MBED compatible. Ready for Cloud compiling.**
   C/C++ Intelligent Code Completion and Smart Code Linter for the super-fast coding.
   Multi-projects workflow with Multiple Panes. Themes Support with dark and light colors.
   Built-in Terminal with PlatformIO CLI tool and support for the powerful Serial Port Monitor.
-  All advanced instruments without leaving your favourite development environment.
+  All advanced instruments without leaving your favorite development environment.
 * **Development Platforms** - Embedded and Desktop development platforms with
   pre-built toolchains, debuggers, uploaders and frameworks which work under
   popular host OS: Mac, Windows, Linux (+ARM)
@@ -39,7 +39,7 @@ libOpenCM3, etc.*
 * :ref:`ide_atom`
 * `Web 2.0 Library Search <http://platformio.org/lib>`_ |
   `Embedded Boards Explorer <http://platformio.org/boards>`_
-* `Project Examples <https://github.com/platformio/platformio/tree/develop/examples>`_
+* `Project Examples <https://github.com/platformio/platformio-examples/tree/develop>`_
 * `Source Code <https://github.com/platformio/platformio>`_ |
   `Issues <https://github.com/platformio/platformio/issues>`_
 * `Blog <http://www.ikravets.com/category/computer-life/platformio>`_ |
@@ -57,8 +57,7 @@ Embedded Development. *Easier Than Ever.*
 * Cloud compiling and  :ref:`ci` with *AppVeyor, Circle CI, Drone, Shippable, Travis CI*
 * Built-in :ref:`Serial Port Monitor <cmd_serialports_monitor>` and
   configurable build :ref:`-flags/-options <projectconf_build_flags>`
-* Pre-built toolchains, :ref:`frameworks` for the
-  :ref:`Development Platforms <platforms>`
+* Pre-built toolchains, :ref:`frameworks` for the :ref:`platforms`
 
 Smart Build System. *Fast and Reliable.*
 ----------------------------------------
@@ -108,8 +107,10 @@ Contents
     :caption: Instruments
     :maxdepth: 3
 
-    Platforms & Boards <platforms/index>
+    platforms/index
+    platforms/embedded_boards
     frameworks/index
+    platforms/custom_platform_and_board
 
 .. toctree::
     :caption: Library Manager

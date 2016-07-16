@@ -81,6 +81,7 @@ class cd(object):
 
 
 class memoized(object):
+
     '''
     Decorator. Caches a function's return value each time it is called.
     If called later with the same arguments, the cached value is returned
@@ -212,10 +213,20 @@ def get_projectlib_dir():
 
 
 def get_pioenvs_dir():
-    return _get_projconf_option_dir(
+    path = _get_projconf_option_dir(
         "envs_dir",
         join(get_project_dir(), ".pioenvs")
     )
+    if not isdir(path):
+        os.makedirs(path)
+    dontmod_path = join(path, "do-not-modify-files-here.url")
+    if not isfile(dontmod_path):
+        with open(dontmod_path, "w") as fp:
+            fp.write("""
+[InternetShortcut]
+URL=http://docs.platformio.org/en/latest/projectconf.html#envs-dir
+""")
+    return path
 
 
 def get_projectdata_dir():
@@ -290,7 +301,7 @@ def get_serialports():
     for p, d, h in comports():
         if not p:
             continue
-        if "windows" in get_systype():
+        if system() == "Windows":
             try:
                 d = unicode(d, errors="ignore")
             except TypeError:
@@ -300,7 +311,7 @@ def get_serialports():
     # fix for PySerial
     if not result and system() == "Darwin":
         for p in glob("/dev/tty.*"):
-            result.append({"port": p, "description": "", "hwid": ""})
+            result.append({"port": p, "description": "n/a", "hwid": "n/a"})
     return result
 
 
@@ -308,7 +319,7 @@ def get_logicaldisks():
     disks = []
     if system() == "Windows":
         result = exec_command(
-            ["wmic", "logicaldisk", "get", "name,VolumeName"]).get("out")
+            ["wmic", "logicaldisk", "get", "name,VolumeName"]).get("out", "")
         disknamere = re.compile(r"^([A-Z]{1}\:)\s*(\S+)?")
         for line in result.split("\n"):
             match = disknamere.match(line.strip())

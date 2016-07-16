@@ -43,41 +43,94 @@ command and generate project via :option:`platformio init --ide` command:
 
 Then:
 
-1. Import this project via ``Menu: File > Import Project``
+1. Place source files (``*.c, *.cpp, *.h, *.hpp``) to ``src`` directory
+2. Import this project via ``Menu: File > Import Project``
    and specify root directory where is located :ref:`projectconf`
-2. Open source file from ``src`` directory (``*.c, *.cpp, *.ino, etc.``)
-3. Build project (*DO NOT RUN*): ``Menu: Run > Build``.
+3. Open source file from ``src`` directory
+4. Build project (*DO NOT RUN*): ``Menu: Run > Build``.
+
+.. warning::
+
+    See know issue: :ref:`ide_clion_knownissues_inopde_not_supported` and how
+    to resolve it.
 
 There are 6 predefined targets for building (*NOT FOR RUNNING*, see marks on
 the screenshot below):
 
 * ``PLATFORMIO_BUILD`` - Build project without auto-uploading
-* ``PLATFORMIO_UPLOAD`` - Build and upload (if no errors).
-* ``PLATFORMIO_CLEAN`` - Clean compiled objects.
-* ``PLATFORMIO_PROGRAM`` - Build and upload using external programmer (if no errors), see :ref:`atmelavr_upload_via_programmer`.
-* ``PLATFORMIO_UPLOADFS`` - Upload files to file system SPIFFS, see :ref:`platform_espressif_uploadfs`.
-* ``PLATFORMIO_UPDATE`` - Update installed platforms and libraries via :ref:`cmd_update`.
+* ``PLATFORMIO_UPLOAD`` - Build and upload (if no errors)
+* ``PLATFORMIO_CLEAN`` - Clean compiled objects
+* ``PLATFORMIO_PROGRAM`` - Build and upload using external programmer
+  (if no errors), see :ref:`atmelavr_upload_via_programmer`
+* ``PLATFORMIO_UPLOADFS`` - Upload files to file system SPIFFS,
+  see :ref:`platform_espressif_uploadfs`
+* ``PLATFORMIO_UPDATE`` - Update installed platforms and libraries via :ref:`cmd_update`
+* ``PLATFORMIO_REBUILD_PROJECT_INDEX`` - Rebuild C/C++ Index for the Project.
+  Allows to fix code completion and code linting issues.
 
 .. warning::
     The libraries which are added, installed or used in the project
-    after generating process wont be reflected in IDE. To fix it you
-    need to reinitialize project using :ref:`cmd_init` (repeat it).
+    after generating process wont be reflected in IDE. To fix it please run
+    ``PLATFORMIO_REBUILD_PROJECT_INDEX`` target.
 
-.. warning::
-    PlatformIO generates empty project by default and **code auto-completion
-    will not work!** To enable auto-completion please choose one of:
+Known issues
+------------
 
-    * Add source files ``*.c, *.cpp, etc`` to ``src`` directory and re-initialize
-      project with command above
-    * Manually correct ``add_executable`` command in ``CMakeLists.txt`` file
-      (will be created in project directory after initialization).
+.. _ide_clion_knownissues_inopde_not_supported:
 
-    ``*.ino`` file isn't acceptable for ``add_executable`` command. You should
-    convert it manually to ``*.cpp``. See `project example <https://github.com/platformio/platformio-examples/tree/develop/ide/clion>`_.
+Arduino ``.ino`` files are not supported
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    More info `CLion issue #CPP-3977 <https://youtrack.jetbrains.com/issue/CPP-3977>`_.
-    Active discussion is located in
-    `PlatformIO issue #132 <https://github.com/platformio/platformio/issues/132>`_.
+CLion uses "CMake" tool for code completion and code linting. As result, it
+doesn't support Arduino files (``*.ino`` and ``.pde``) because they are
+not valid C/C++ based source files:
+
+1. Missing includes such as ``#include <Arduino.h>``
+2. Function declarations are omitted.
+
+Convert Arduino file to C++ manually
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For example, we have the next ``Demo.ino`` file:
+
+.. code-block:: cpp
+
+    void function setup () {
+        someFunction(13);
+    }
+
+    void function loop() {
+        delay(1000);
+    }
+
+    void someFunction(int num) {
+    }
+
+Let's convert it to  ``Demo.cpp``:
+
+1. Add ``#include <Arduino.h>`` at the top of the source file
+2. Declare each custom function (excluding built-in, such as ``setup`` and ``loop``)
+   before it will be called.
+
+The final ``Demo.cpp``:
+
+.. code-block:: cpp
+
+    #include <Arduino.h>
+
+    void someFunction(int num);
+
+    void function setup () {
+        someFunction(13);
+    }
+
+    void function loop() {
+        delay(1000);
+    }
+
+    void someFunction(int num) {
+    }
+
 
 Articles / Manuals
 ------------------
@@ -92,6 +145,6 @@ Examples
 --------
 
 "Blink" Project
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
 Source code of `CLion "Blink" Project <https://github.com/platformio/platformio-examples/tree/develop/ide/clion>`_.

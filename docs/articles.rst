@@ -23,10 +23,30 @@ Here are recent articles about PlatformIO:
 2016
 ^^^^
 
+* Jul 5, 2016 - **Ivan Kravets, Ph.D.** - `Explore the new development instruments for Arduino with PlatformIO ecosystem <http://www.slideshare.net/ivankravets/explore-the-new-development-instruments-for-arduino-with-platformio-ecosystem>`_
+* Jul 5, 2016 - **Belinda** - `Monte Bianco Arduino Developer Summit <http://www.arduino.org/blog/arduino-developer-summit>`_
+* Jul 1, 2016 - **Tam Hanna** - `Mikrocontroller-Gipfel in den Alpen: Arduino Developer Summit, Tag eins (Microcontroller peaks in the Alps: Arduino Developer Summit, Day One, German) <http://www.heise.de/make/meldung/Mikrocontroller-Gipfel-in-den-Alpen-Arduino-Developer-Summit-Tag-eins-3252421.html>`_
+* Jun 14, 2016 - **Glyn Hudson** - `OpenEnergyMonitor Part 2/3: Firmware Continuous Test & Build <https://blog.openenergymonitor.org/2016/06/auto-build-continuous-test-firmware/>`_
+* Jun 13, 2016 - **Daniel Eichhorn** - `New Weather Station Demo on Github <http://blog.squix.org/2016/06/new-weather-station-demo-on-github.html>`_
+* Jun 12, 2016 - **Glyn Hudson** - `OpenEnergyMonitor Part 1/3: PlatformIO open-source embedded development ecosystem <https://blog.openenergymonitor.org/2016/06/platformio/>`_
+* Jun 12, 2016 - **Uli Wolf** - `Nutzung von PlatformIO im Atom Editor zur Entwicklung von Arduino Code (Use PlatformIO and Atom Editor to develop Arduino code, German) <https://wolf-u.li/5668/nutzung-von-platform-io-im-atom-editor-zur-entwicklung-von-arduino-code/>`_
+* Jun 3, 2016 - **Daniel Eichhorn** - `ESP8266: Continuous Delivery Pipeline – Push To Production <http://blog.squix.org/2016/06/esp8266-continuous-delivery-pipeline-push-to-production.html>`_
+* May 30, 2016 - **Ron Moerman** - `IoT Development with PlatformIO <https://electronicsworkbench.io/blog/platformio>`_
+* May 29, 2016 - **Chris Synan** - `Reverse Engineer RF Remote Controller for IoT! <http://www.instructables.com/id/Reverse-Engineer-RF-Remote-Controller-for-IoT/?ALLSTEPS>`_
+* May 26, 2016 - **Charlie Key** - `7 Best Developer Tools To Build Your NEXT Internet of Things Application <https://www.losant.com/blog/7-best-developer-tools-to-build-your-next-internet-of-things-application>`_
+* May 22, 2016 - **Pedro Minatel** - `Estação meteorológica com ESP8266 (Weather station with ESP8266, Portuguese) <http://pedrominatel.com.br/esp8266/estacao-meteorologica-com-esp8266/>`_
+* May 16, 2016 - **Pedro Minatel** - `Controle remoto WiFi com ESP8266 (WiFi remote control using ESP8266, Portuguese) <http://pedrominatel.com.br/esp8266/controle-remoto-wifi-com-esp8266/>`_
+* May 11, 2016 - **Jo Vandeginste** - `Using PlatformIO to compile for Jeelabs' Jeenode Micro <http://jovandeginste.github.io/2016/05/11/using-platformio-to-compile-for-jeelabs-jeenode-micro.html>`_
+* May 08, 2016 - **Radoslaw Bob** - `Touch controlled buzzer (Nodemcu ESP8266) <https://gettoknowthebob.wordpress.com/2016/05/08/touch-controlled-buzzer-nodemcu-esp8266/>`_
+* May 06, 2016 - **Jean Roux** - `The IoT building blocks I use for my home-automation projects <http://iotplay.blogspot.fr/2016/05/the-components-i-use-for-my-projects.html/>`_
+* May 05, 2016 - **Ivan Kravets, Ph.D. / Eclipse Virtual IoT Meetup** - `PlatformIO: a cross-platform IoT solution to build them all! <http://www.meetup.com/Virtual-IoT/events/229964142/>`_
+* May 01, 2016 - **Pedro Minatel** - `PlatformIO – Uma alternativa ao Arduino IDE (PlatformIO - An alternative to the Arduino IDE, Portuguese) <http://pedrominatel.com.br/ferramentas/platformio-uma-alternativa-ao-arduino-ide/>`_
 * Apr 23, 2016 - **Al Williams** - `Hackaday: Atomic Arduino (and Other) Development <http://hackaday.com/2016/04/23/atomic-arduino-and-other-development/>`_
 * Apr 16, 2016 - **Sathittham Sangthong** - `[PlatformIO] มาลองเล่น PlatformIO แทน Arduino IDE กัน (Let's play together with PlatformIO IDE [alternative to Arduino IDE], Thai) <http://www.sathittham.com/platformio/platformio-ide/>`_
+* Apr 15, 2016 - **Daniel Eichhorn** - `ESP8266: Offline Debugging with the Platformio Environment <http://blog.squix.ch/2016/04/esp8266-offline-debugging-with.html>`_
 * Apr 11, 2016 - **Matjaz Trcek** - `Top 5 Arduino integrated development environments <https://codeandunicorns.com/top-5-arduino-integrated-development-environments-ide/>`_
 * Apr 06, 2016 - **Aleks** - `PlatformIO ausprobiert (Tried PlatformIO, German) <http://5volt-junkie.net/platformio/>`_
+* Apr 02, 2016 - **Diego Pinto** - `Você tem coragem de abandonar a IDE do Arduino? PlatformIO + Atom (Do you dare to leave the Arduino IDE? PlatformIO + Atom, Portuguese) <http://www.clubemaker.com.br/?rota=artigo/81>`_
 * Mar 30, 2016 - **Brandon Cannaday** - `Getting Started with PlatformIO and ESP8266 NodeMcu <https://www.losant.com/blog/getting-started-with-platformio-esp8266-nodemcu>`_
 * Mar 29, 2016 - **Pablo Peñalve** - `PlatformIO + Geany + Raspberry PI, Spanish <http://ret-catriel.blogspot.com/2016/03/framework-platformio-geany-raspberry-pi.html>`_
 * Mar 24, 2016 - **NAzT** - `PlatformIO และการปรับแต่ง เพื่อใช้สำหรับพัฒนา Arduino Library (PlatformIO and advanced development for Arduino Library, Thai) <https://cmmakerclub.com/tools-2/config-platformio-for-arduino-framework-developer/>`_

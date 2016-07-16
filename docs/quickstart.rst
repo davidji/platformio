@@ -1,4 +1,4 @@
-..  Copyright 2014-2016 Ivan Kravets <me@ikravets.com>
+..  Copyright 2014-present Ivan Kravets <me@ikravets.com>
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -15,7 +15,7 @@ Quick Start
 ===========
 
 .. note::
-    If you are looking for a Qucik Start for PlatformIO IDE please follow to
+    If you are looking for a Quick Start for PlatformIO IDE please follow to
     :ref:`PlatformIO IDE Quick Start <atom_ide_quickstart>` page.
 
 This tutorial introduces you to the basics of PlatformIO Command Line Interface
@@ -30,7 +30,7 @@ PlatformIO CLI provides special :ref:`cmd_init` command for configuring your pro
 It allows to initialize new empty project or update existing with the new data.
 
 What is more, :ref:`cmd_init` can be used for :ref:`ide`. It means that you will
-be able to import pre-generated PlatformIO project using favourite IDE and
+be able to import pre-generated PlatformIO project using favorite IDE and
 extend it with the professional instruments for IoT development.
 
 This tutorial is based on the next popular embedded boards and development
@@ -256,5 +256,5 @@ Arduino Uno:
 Further Reading
 ---------------
 
-* `Project examples <https://github.com/platformio/platformio/tree/develop/examples>`_
+* `Project examples <https://github.com/platformio/platformio-examples/tree/develop>`_
 * :ref:`userguide` for PlatformIO CLI commands

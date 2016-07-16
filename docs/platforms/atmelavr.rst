@@ -1,4 +1,4 @@
-..  Copyright 2014-2016 Ivan Kravets <me@ikravets.com>
+..  Copyright 2014-present Ivan Kravets <me@ikravets.com>
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -42,16 +42,6 @@ Packages
 
     * - ``tool-micronucleus``
       - `Micronucleus <https://github.com/micronucleus/micronucleus>`_
-
-.. warning::
-    **Linux Users:** Don't forget to install "udev" rules file
-    `99-platformio-udev.rules <https://github.com/platformio/platformio/blob/develop/scripts/99-platformio-udev.rules>`_ (an instruction is located in the file).
-
-
-    **Windows Users:** Please check that you have correctly installed USB
-    driver from board manufacturer
-
-
 
 Frameworks
 ----------
@@ -165,6 +155,33 @@ Adafruit
       - 16 MHz
       - 8 Kb
       - 0.5 Kb
+
+Arduboy
+~~~~~~~
+
+.. list-table::
+    :header-rows:  1
+
+    * - Type ``board``
+      - Name
+      - Microcontroller
+      - Frequency
+      - Flash
+      - RAM
+
+    * - ``arduboy``
+      - `Arduboy <https://www.arduboy.com>`_
+      - ATMEGA32U4
+      - 16 MHz
+      - 32 Kb
+      - 2.5 Kb
+
+    * - ``arduboy_devkit``
+      - `Arduboy DevKit <https://www.arduboy.com>`_
+      - ATMEGA32U4
+      - 16 MHz
+      - 32 Kb
+      - 2.5 Kb
 
 Arduino
 ~~~~~~~
@@ -702,6 +719,13 @@ Mcudude
       - 64 Kb
       - 4 Kb
 
+    * - ``mightycore8535``
+      - `MightyCore ATmega8535 <https://www.tindie.com/products/MCUdude/dip-40-arduino-compatible-development-board>`_
+      - ATMEGA16
+      - 16 MHz
+      - 8 Kb
+      - 0.5 Kb
+
 Microduino
 ~~~~~~~~~~
 
@@ -777,6 +801,26 @@ Microduino
       - 8 MHz
       - 64 Kb
       - 4 Kb
+
+OpenEnergyMonitor
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+    :header-rows:  1
+
+    * - Type ``board``
+      - Name
+      - Microcontroller
+      - Frequency
+      - Flash
+      - RAM
+
+    * - ``emonpi``
+      - `OpenEnergyMonitor emonPi <https://github.com/openenergymonitor/emonpi>`_
+      - ATMEGA328P
+      - 16 MHz
+      - 32 Kb
+      - 2 Kb
 
 PanStamp
 ~~~~~~~~

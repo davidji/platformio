@@ -18,30 +18,20 @@
 
 from os.path import basename, join
 
-from SCons.Script import (COMMAND_LINE_TARGETS, AlwaysBuild, Default,
+from SCons.Script import (COMMAND_LINE_TARGETS, AlwaysBuild, Builder, Default,
                           DefaultEnvironment, SConscript)
 
 from platformio.util import get_serialports
 
 
 def BeforeUpload(target, source, env):  # pylint: disable=W0613,W0621
-    env.AutodetectUploadPort()
-
-    board_type = env.subst("$BOARD")
-    if "zero" not in board_type:
-        env.Append(
-            UPLOADERFLAGS=[
-                "-U",
-                "true" if ("usb" in board_type.lower(
-                ) or board_type == "digix") else "false"
-            ])
 
     upload_options = env.get("BOARD_OPTIONS", {}).get("upload", {})
 
     if not upload_options.get("disable_flushing", False):
         env.FlushSerialBuffer("$UPLOAD_PORT")
 
-    before_ports = [i['port'] for i in get_serialports()]
+    before_ports = get_serialports()
 
     if upload_options.get("use_1200bps_touch", False):
         env.TouchSerialPort("$UPLOAD_PORT", 1200)
@@ -50,7 +40,8 @@ def BeforeUpload(target, source, env):  # pylint: disable=W0613,W0621
         env.Replace(UPLOAD_PORT=env.WaitForNewSerialPort(before_ports))
 
     # use only port name for BOSSA
-    if "/" in env.subst("$UPLOAD_PORT"):
+    if ("/" in env.subst("$UPLOAD_PORT") and
+            env.subst("$UPLOAD_PROTOCOL") == "sam-ba"):
         env.Replace(UPLOAD_PORT=basename(env.subst("$UPLOAD_PORT")))
 
 
@@ -58,41 +49,8 @@ env = DefaultEnvironment()
 
 SConscript(env.subst(join("$PIOBUILDER_DIR", "scripts", "basearm.py")))
 
-if env.subst("$BOARD") == "zero":
-    env.Replace(
-        UPLOADER=join("$PIOPACKAGES_DIR", "tool-openocd", "bin", "openocd"),
-        UPLOADERFLAGS=[
-            "-d2",
-            "-s",
-            join(
-                "$PIOPACKAGES_DIR",
-                "tool-openocd", "share", "openocd", "scripts"),
-            "-f",
-            join(
-                "$PLATFORMFW_DIR", "variants",
-                "${BOARD_OPTIONS['build']['variant']}", "openocd_scripts",
-                "${BOARD_OPTIONS['build']['variant']}.cfg"
-            ),
-            "-c", "\"telnet_port", "disabled;",
-            "program", "{{$SOURCES}}",
-            "verify", "reset", "0x00002000;", "shutdown\""
-        ],
-        UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS'
-    )
-else:
-    env.Replace(
-        UPLOADER=join("$PIOPACKAGES_DIR", "$PIOPACKAGE_UPLOADER", "bossac"),
-        UPLOADERFLAGS=[
-            "--info",
-            "--port", '"$UPLOAD_PORT"',
-            "--erase",
-            "--write",
-            "--verify",
-            "--reset",
-            "--debug"
-        ],
-        UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS $SOURCES'
-    )
+BOARD_OPTIONS = env.get("BOARD_OPTIONS", {})
+
 
 env.Append(
 
@@ -111,8 +69,7 @@ env.Append(
     ],
 
     CPPDEFINES=[
-        "USBCON",
-        'USB_MANUFACTURER="PlatformIO"'
+        "USBCON"
     ],
 
     LINKFLAGS=[
@@ -123,8 +80,21 @@ env.Append(
     ]
 )
 
+user_code_section = BOARD_OPTIONS.get("upload", {}).get("section_start", False)
 
-if "sam3x8e" in env.get("BOARD_OPTIONS", {}).get("build", {}).get("mcu", None):
+if user_code_section:
+    env.Append(
+        CPPDEFINES=[
+            "printf=iprintf"
+        ],
+
+        LINKFLAGS=[
+            "-Wl,--entry=Reset_Handler",
+            "-Wl,--section-start=.text=%s" % user_code_section
+        ]
+    )
+
+if "sam3x8e" in BOARD_OPTIONS.get("build", {}).get("mcu", ""):
     env.Append(
         CPPDEFINES=[
             "printf=iprintf"
@@ -133,19 +103,106 @@ if "sam3x8e" in env.get("BOARD_OPTIONS", {}).get("build", {}).get("mcu", None):
         LINKFLAGS=[
             "-Wl,--entry=Reset_Handler",
             "-Wl,--start-group"
-        ],
-
-        UPLOADERFLAGS=[
-            "--boot",
         ]
 
     )
-elif "zero" in env.subst("$BOARD"):
+elif "samd" in BOARD_OPTIONS.get("build", {}).get("mcu", ""):
     env.Append(
         LINKFLAGS=[
             "--specs=nosys.specs",
             "--specs=nano.specs"
         ]
+    )
+
+
+upload_protocol = BOARD_OPTIONS.get("upload", {}).get("protocol", None)
+
+if upload_protocol == "openocd":
+    env.Replace(
+        UPLOADER=join("$PIOPACKAGES_DIR", "tool-openocd", "bin", "openocd"),
+        UPLOADERFLAGS=[
+            "-d2",
+            "-s", join(
+                "$PIOPACKAGES_DIR",
+                "tool-openocd",
+                "share",
+                "openocd",
+                "scripts"
+            ),
+
+            "-f", join(
+                "$PLATFORMFW_DIR",
+                "variants",
+                "${BOARD_OPTIONS['build']['variant']}",
+                "openocd_scripts",
+                "${BOARD_OPTIONS['build']['variant']}.cfg"
+            ),
+
+            "-c", "\"telnet_port", "disabled;",
+            "program", "{{$SOURCES}}",
+            "verify", "reset",
+            "%s;" % user_code_section if user_code_section else "0x2000",
+            "shutdown\""
+        ],
+
+        UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS'
+    )
+
+elif upload_protocol == "sam-ba":
+
+    board_type = env.subst("$BOARD")
+
+    env.Replace(
+        UPLOADER=join("$PIOPACKAGES_DIR", "$PIOPACKAGE_UPLOADER", "bossac"),
+        UPLOADERFLAGS=[
+            "--info",
+            "--port", '"$UPLOAD_PORT"',
+            "--erase",
+            "--write",
+            "--verify",
+            "--reset",
+            "--debug",
+            "-U",
+            "true" if ("usb" in board_type.lower(
+            ) or board_type == "digix") else "false"
+        ],
+
+        UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS $SOURCES'
+    )
+
+    if "sam3x8e" in BOARD_OPTIONS.get("build", {}).get("mcu", ""):
+        env.Append(UPLOADERFLAGS=["--boot"])
+
+elif upload_protocol == "stk500v2":
+    env.Append(
+        BUILDERS=dict(
+            ElfToHex=Builder(
+                action=" ".join([
+                    "$OBJCOPY",
+                    "-O",
+                    "ihex",
+                    "-R",
+                    ".eeprom",
+                    "$SOURCES",
+                    "$TARGET"]),
+                suffix=".hex"
+            )
+        )
+    )
+
+    env.Replace(
+        UPLOADER=join("$PIOPACKAGES_DIR", "tool-avrdude", "avrdude"),
+        UPLOADERFLAGS=[
+            "-C", '"%s"' % join("$PIOPACKAGES_DIR",
+                                "tool-avrdude", "avrdude.conf"),
+            "-v",
+            "-p", "atmega2560",  # Arduino M0/Tian upload hook
+            "-c", "$UPLOAD_PROTOCOL",
+            "-P", '"$UPLOAD_PORT"',
+            "-b", "$UPLOAD_SPEED"
+        ],
+
+        UPLOADCMD='"$UPLOADER" $UPLOADERFLAGS -U flash:w:$SOURCES:i'
     )
 
 #
@@ -160,6 +217,8 @@ target_elf = env.BuildProgram()
 
 if "uploadlazy" in COMMAND_LINE_TARGETS:
     target_firm = join("$BUILD_DIR", "firmware.bin")
+elif upload_protocol == "stk500v2":
+    target_firm = env.ElfToHex(join("$BUILD_DIR", "firmware"), target_elf)
 else:
     target_firm = env.ElfToBin(join("$BUILD_DIR", "firmware"), target_elf)
 
@@ -174,11 +233,12 @@ AlwaysBuild(target_size)
 # Target: Upload by default .bin file
 #
 
-if env.subst("$BOARD") == "zero":
+if upload_protocol == "openocd":
     upload = env.Alias(["upload", "uploadlazy"], target_firm, "$UPLOADCMD")
 else:
-    upload = env.Alias(["upload", "uploadlazy"], target_firm,
-                       [BeforeUpload, "$UPLOADCMD"])
+    upload = env.Alias(
+        ["upload", "uploadlazy"], target_firm,
+        [env.AutodetectUploadPort, BeforeUpload, "$UPLOADCMD"])
 
 AlwaysBuild(upload)
 

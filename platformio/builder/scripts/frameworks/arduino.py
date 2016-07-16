@@ -60,8 +60,11 @@ elif env.get("PLATFORM") == "espressif":
             join("$PLATFORMFW_DIR", "tools", "sdk", "lwip", "include")
         ],
         LIBPATH=[join("$PLATFORMFW_DIR", "tools", "sdk", "lib")],
-        LIBS=["mesh", "wpa2", "smartconfig", "pp", "main", "wpa", "lwip",
-              "net80211", "wps", "crypto", "phy", "hal", "axtls", "gcc", "m"]
+        LIBS=[
+            "mesh", "wpa2", "smartconfig", "pp", "main", "wpa", "lwip",
+            "net80211", "wps", "crypto", "phy", "hal", "axtls", "gcc",
+            "m", "stdc++"
+        ]
     )
     env.VariantDirWrap(
         join("$BUILD_DIR", "generic"),
@@ -112,7 +115,10 @@ elif env.get("PLATFORM") == "microchippic32":
                 "$PLATFORMFW_DIR", "variants",
                 "${BOARD_OPTIONS['build']['variant']}"
             )
-        ]
+        ],
+
+        CPPDEFINES=["ARDUINO_ARCH_PIC32"]
+
     )
 
 elif "intel" in env.get("PLATFORM"):
@@ -179,8 +185,8 @@ ARDUINO_VERSION = int(
 ARDUINO_USBDEFINES = []
 if "usb_product" in BOARD_BUILDOPTS:
     ARDUINO_USBDEFINES = [
-        "USB_VID=${BOARD_OPTIONS['build']['hwid'][0][0]}",
-        "USB_PID=${BOARD_OPTIONS['build']['hwid'][0][1]}",
+        "USB_VID=${BOARD_OPTIONS['build']['hwids'][0][0]}",
+        "USB_PID=${BOARD_OPTIONS['build']['hwids'][0][1]}",
         'USB_PRODUCT=\\"%s\\"' % (env.subst(
             "${BOARD_OPTIONS['build']['usb_product']}").replace('"', "")),
         'USB_MANUFACTURER=\\"%s\\"' % (env.subst(
@@ -210,11 +216,21 @@ env.Append(
 if env.subst("${PLATFORMFW_DIR}")[-3:] == "sam":
     env.VariantDirWrap(
         join("$BUILD_DIR", "FrameworkCMSISInc"),
-        join("$PLATFORMFW_DIR", "system", "CMSIS", "CMSIS", "Include")
+        join(
+            "$PLATFORMFW_DIR", "system",
+            "CMSIS%s" % (
+                "_ORG" if BOARD_CORELIBDIRNAME.endswith("_org") else ""),
+            "CMSIS", "Include"
+        )
     )
     env.VariantDirWrap(
         join("$BUILD_DIR", "FrameworkDeviceInc"),
-        join("$PLATFORMFW_DIR", "system", "CMSIS", "Device", "ATMEL")
+        join(
+            "$PLATFORMFW_DIR", "system",
+            "CMSIS%s" % (
+                "_ORG" if BOARD_CORELIBDIRNAME.endswith("_org") else ""),
+            "Device", "ATMEL"
+        )
     )
     env.VariantDirWrap(
         join("$BUILD_DIR", "FrameworkLibSam"),

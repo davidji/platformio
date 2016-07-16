@@ -9,34 +9,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 
-.. _cmd_platforms_uninstall:
+Custom Platform & Board
+=======================
 
-platformio platforms uninstall
-==============================
+.. toctree::
+    :maxdepth: 2
 
-.. contents::
-
-Usage
------
-
-.. code-block:: bash
-
-    platformio platforms uninstall PLATFORM
-
-
-Description
------------
-
-Uninstall specified :ref:`platforms`
-
-
-Examples
---------
-
-.. code-block:: bash
-
-    $ platformio platforms uninstall timsp430
-    Uninstalling toolchain-timsp430 package:        [OK]
-    Uninstalling tool-mspdebug package:             [OK]
-    Uninstalling framework-energiamsp430 package:   [OK]
-    The platform 'timsp430' has been successfully uninstalled!
+    creating_platform
+    creating_board

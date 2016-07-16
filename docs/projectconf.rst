@@ -1,4 +1,4 @@
-..  Copyright 2014-2016 Ivan Kravets <me@ikravets.com>
+..  Copyright 2014-present Ivan Kravets <me@ikravets.com>
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -97,7 +97,11 @@ This option can be overridden by global environment variable
 ``envs_dir``
 ^^^^^^^^^^^^
 
-This is a cache directory. *PlatformIO Build System* uses this folder for project
+.. warning::
+    **PLEASE DO NOT EDIT FILES IN THIS FOLDER**. PlatformIO will overwrite
+    your changes on the next build. **THIS IS A CACHE DIRECTORY**.
+
+*PlatformIO Build System* uses this folder for project
 environments to store compiled object files, static libraries, firmwares and
 other cached information. It allows PlatformIO to build source code extremely
 fast!
@@ -194,7 +198,7 @@ General options
 ``platform``
 ^^^^^^^^^^^^
 
-:ref:`Platform <platforms>` type.
+:ref:`platforms` type.
 
 
 .. _projectconf_env_framework:
@@ -351,6 +355,10 @@ Example:
     [env:specific_ld_script]
     build_flags = -Wl,-T/path/to/ld_script.ld
 
+    [env:exec_command]
+    # get VCS revision "on-the-fly"
+    build_flags = !echo "-DPIO_SRC_REV="$(git rev-parse HEAD)
+
 
 For more detailed information about available flags/options go to:
 
@@ -373,7 +381,7 @@ For more detailed information about available flags/options go to:
 ``src_build_flags``
 ^^^^^^^^^^^^^^^^^^^
 
-An option ``src_build_flags`` has the same behaviour like ``build_flags``
+An option ``src_build_flags`` has the same behavior like ``build_flags``
 but will be applied only for the project source code from
 :ref:`projectconf_pio_src_dir` directory.
 
@@ -585,7 +593,7 @@ Example:
 ``lib_dfcyclic``
 ^^^^^^^^^^^^^^^^
 
-Control cyclic (recursive) behaviour for ``Library Dependency Finder (LDF)``.
+Control cyclic (recursive) behavior for ``Library Dependency Finder (LDF)``.
 By default, this option is turned OFF (``lib_dfcyclic=False``) and means that
 ``LDF`` will find only libraries which are included in source files from the
 project :ref:`projectconf_pio_src_dir`.
@@ -610,7 +618,7 @@ Examples
 
 .. note::
     A full list with project examples can be found in
-    `PlatformIO Repository <https://github.com/platformio/platformio/tree/develop/examples>`_.
+    `PlatformIO Repository <https://github.com/platformio/platformio-examples/tree/develop>`_.
 
 1. :ref:`platform_atmelavr`: Arduino UNO board with auto pre-configured
    ``board_*`` and ``upload_*`` options (use only ``board`` option) and Arduino

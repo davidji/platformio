@@ -35,6 +35,13 @@ SRC_DEFAULT_FILTER = " ".join([
 
 def BuildProgram(env):
 
+    def _append_pio_macros():
+        env.AppendUnique(
+            CPPDEFINES=["PLATFORMIO={0:02d}{1:02d}{2:02d}".format(
+                *pioversion_to_intstr())])
+
+    _append_pio_macros()
+
     # fix ASM handling under non-casitive OS
     if not case_sensitive_suffixes(".s", ".S"):
         env.Replace(
@@ -43,17 +50,19 @@ def BuildProgram(env):
         )
 
     # process extra flags from board
-    env.ProcessFlags([
-        env.get("BOARD_OPTIONS", {}).get("build", {}).get("extra_flags")
-    ])
+    env.ProcessFlags(
+        env.get("BOARD_OPTIONS", {}).get("build", {}).get("extra_flags"))
     # remove base flags
     env.ProcessUnFlags(env.get("BUILD_UNFLAGS"))
     # apply user flags
-    env.ProcessFlags([env.get("BUILD_FLAGS")])
+    env.ProcessFlags(env.get("BUILD_FLAGS"))
 
     if env.get("FRAMEWORK"):
         env.BuildFrameworks([
             f.lower().strip() for f in env.get("FRAMEWORK", "").split(",")])
+
+    # restore PIO macros if it was deleted by framework
+    _append_pio_macros()
 
     # build dependent libs
     deplibs = env.BuildDependentLibraries("$PROJECTSRC_DIR")
@@ -75,11 +84,10 @@ def BuildProgram(env):
         )
 
     # Handle SRC_BUILD_FLAGS
-    env.ProcessFlags([env.get("SRC_BUILD_FLAGS", None)])
+    env.ProcessFlags(env.get("SRC_BUILD_FLAGS"))
 
     env.Append(
-        CPPDEFINES=["PLATFORMIO={0:02d}{1:02d}{2:02d}".format(
-            *pioversion_to_intstr())],
+        CPPPATH=["$PROJECTSRC_DIR"],
         LIBS=deplibs,
         LIBPATH=["$BUILD_DIR"]
     )
@@ -93,30 +101,35 @@ def BuildProgram(env):
             "Error: Nothing to build. Please put your source code files "
             "to '%s' folder" % env.subst("$PROJECTSRC_DIR"))
 
-    return env.Program(
+    program = env.Program(
         join("$BUILD_DIR", env.subst("$PROGNAME")),
         sources
     )
 
+    if set(["upload", "uploadlazy", "program"]) & set(COMMAND_LINE_TARGETS):
+        env.AddPostAction(program, env.CheckUploadSize)
+
+    return program
+
 
 def ProcessFlags(env, flags):
-    for f in flags:
-        if not f:
+    if not flags:
+        return
+    parsed_flags = env.ParseFlags(str(flags))
+    for flag in parsed_flags.pop("CPPDEFINES"):
+        if not isinstance(flag, list):
+            env.Append(CPPDEFINES=flag)
             continue
-        parsed_flags = env.ParseFlags(str(f))
-        for flag in parsed_flags.pop("CPPDEFINES"):
-            if not isinstance(flag, list):
-                env.Append(CPPDEFINES=flag)
-                continue
-            if '\"' in flag[1]:
-                flag[1] = flag[1].replace('\"', '\\\"')
-            env.Append(CPPDEFINES=[flag])
-        env.Append(**parsed_flags)
+        if '\"' in flag[1]:
+            flag[1] = flag[1].replace('\"', '\\\"')
+        env.Append(CPPDEFINES=[flag])
+    env.Append(**parsed_flags)
 
-    # fix relative CPPPATH
-    for i, p in enumerate(env.get("CPPPATH", [])):
-        if isdir(p):
-            env['CPPPATH'][i] = realpath(p)
+    # fix relative CPPPATH & LIBPATH
+    for k in ("CPPPATH", "LIBPATH"):
+        for i, p in enumerate(env.get(k, [])):
+            if isdir(p):
+                env[k][i] = realpath(p)
     # fix relative path for "-include"
     for i, f in enumerate(env.get("CCFLAGS", [])):
         if isinstance(f, tuple) and f[0] == "-include":
@@ -135,10 +148,17 @@ def ProcessFlags(env, flags):
 def ProcessUnFlags(env, flags):
     if not flags:
         return
-    for var, values in env.ParseFlags(flags).items():
-        for v in values:
-            if v in env[var]:
-                env[var].remove(v)
+    parsed_flags = env.ParseFlags(flags)
+    all_flags = []
+    for items in parsed_flags.values():
+        all_flags.extend(items)
+    all_flags = set(all_flags)
+
+    for key in parsed_flags:
+        cur_flags = set(env.get(key, []))
+        for item in cur_flags & all_flags:
+            while item in env[key]:
+                env[key].remove(item)
 
 
 def IsFileWithExt(env, file_, ext):  # pylint: disable=W0613

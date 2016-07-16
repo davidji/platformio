@@ -49,23 +49,24 @@ def BeforeUpload(target, source, env):  # pylint: disable=W0613,W0621
     env.AutodetectUploadPort()
     env.Append(UPLOADERFLAGS=["-P", '"$UPLOAD_PORT"'])
 
-    if env.subst("$BOARD") == "raspduino":
+    if env.subst("$BOARD") in ("raspduino", "emonpi"):
 
         def _rpi_sysgpio(path, value):
             with open(path, "w") as f:
                 f.write(str(value))
 
-        _rpi_sysgpio("/sys/class/gpio/export", 18)
-        _rpi_sysgpio("/sys/class/gpio/gpio18/direction", "out")
-        _rpi_sysgpio("/sys/class/gpio/gpio18/value", 1)
+        pin_num = 18 if env.subst("$BOARD") == "raspduino" else 4
+        _rpi_sysgpio("/sys/class/gpio/export", pin_num)
+        _rpi_sysgpio("/sys/class/gpio/gpio%d/direction" % pin_num, "out")
+        _rpi_sysgpio("/sys/class/gpio/gpio%d/value" % pin_num, 1)
         sleep(0.1)
-        _rpi_sysgpio("/sys/class/gpio/gpio18/value", 0)
-        _rpi_sysgpio("/sys/class/gpio/unexport", 18)
+        _rpi_sysgpio("/sys/class/gpio/gpio%d/value" % pin_num, 0)
+        _rpi_sysgpio("/sys/class/gpio/unexport", pin_num)
     else:
         if not upload_options.get("disable_flushing", False):
             env.FlushSerialBuffer("$UPLOAD_PORT")
 
-        before_ports = [i['port'] for i in get_serialports()]
+        before_ports = get_serialports()
 
         if upload_options.get("use_1200bps_touch", False):
             env.TouchSerialPort("$UPLOAD_PORT", 1200)
@@ -148,10 +149,9 @@ AlwaysBuild(upload)
 # Target: Upload EEPROM data (from EEMEM directive)
 #
 
-uploadeep = env.Alias(
-    "uploadeep",
-    env.ElfToEep(join("$BUILD_DIR", "firmware"), target_elf),
-    [BeforeUpload, "$UPLOADEEPCMD"])
+uploadeep = env.Alias("uploadeep",
+                      env.ElfToEep(join("$BUILD_DIR", "firmware"), target_elf),
+                      [BeforeUpload, "$UPLOADEEPCMD"])
 AlwaysBuild(uploadeep)
 
 #
